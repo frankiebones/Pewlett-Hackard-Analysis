@@ -73,3 +73,42 @@ ON (e.emp_no = de.emp_no)
 WHERE (e.birth_date BETWEEN '1952-01-01' AND '1955-12-31')
 AND (e.hire_date BETWEEN '1985-01-01' AND '1988-12-31')
 AND (de.to_date = '9999-01-01');
+
+-- Management: A list of managers for each department, including the department number, name, and the manager's employee number, last name, first name, and the starting and ending employment dates
+SELECT dm.emp_no, dm.dept_no, d.dept_name, ce.first_name, ce.last_name, dm.from_date, dm.to_date
+INTO manager_info
+FROM dept_manager AS dm
+INNER JOIN departments AS d
+ON (dm.dept_no = d.dept_no)
+INNER JOIN current_emp AS ce
+ON (dm.emp_no = ce.emp_no);
+
+-- Department Retirees: An updated current_emp list that includes everything it currently has, but also the employee's departments
+SELECT ce.emp_no, ce.first_name, ce.last_name, d.dept_name
+-- INTO dept_info
+FROM current_emp AS ce
+INNER JOIN dept_emp AS de
+ON (ce.emp_no = de.emp_no)
+INNER JOIN departments AS d
+ON (d. dept_no = de.dept_no);
+
+-- Sales team: Employee numbers, first name, last name, department name
+SELECT ce.emp_no, ce.first_name, ce.last_name, d.dept_name
+INTO sales_dept
+FROM current_emp AS ce
+INNER JOIN dept_emp AS de
+ON (ce.emp_no = de.emp_no)
+INNER JOIN departments AS d
+ON (de.dept_no = d.dept_no)
+WHERE d.dept_name = 'Sales';
+
+-- Sales & Development teams: Employee numbers, first name, last name, department name
+SELECT ce.emp_no, ce.first_name, ce.last_name, d.dept_name
+INTO sales_dev
+FROM current_emp AS ce
+INNER JOIN dept_emp AS de
+ON (ce.emp_no = de.emp_no)
+INNER JOIN departments AS d
+ON (de.dept_no = d.dept_no)
+WHERE d.dept_name IN ('Sales', 'Development')
+ORDER BY dept_name;
